@@ -1,0 +1,169 @@
+{% extends 'prueba/base.html' %}
+{% load static %}
+
+{% block title %}Bienvenido - MiApp{% endblock %}
+
+{% block main_class %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white text-center d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-3 fw-bold mb-4 animate-title">
+                    <i class="fas fa-rocket me-3"></i>Bienvenido a MiApp
+                </h1>
+                <p class="lead mb-4">
+                    La plataforma moderna construida con Django para gestionar tus proyectos de forma profesional
+                </p>
+                {% if user.is_authenticated %}
+                    <div class="alert alert-success d-inline-block">
+                        <i class="fas fa-check-circle me-2"></i>
+                        ¡Hola <strong>{{ user.username }}</strong>! Estás conectado
+                    </div>
+                {% else %}
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a href="{% url 'registro' %}" class="btn btn-light btn-lg px-4 gap-3">
+                            <i class="fas fa-user-plus me-2"></i>Comenzar Gratis
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Características Principales</h2>
+            <p class="text-muted">Todo lo que necesitas en un solo lugar</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Seguridad</h5>
+                        <p class="card-text text-muted">Autenticación robusta y protección de datos de nivel empresarial</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-bolt fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Rápido</h5>
+                        <p class="card-text text-muted">Rendimiento optimizado para una experiencia fluida</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-mobile-alt fa-3x text-success"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Responsive</h5>
+                        <p class="card-text text-muted">Funciona perfectamente en cualquier dispositivo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="stat-box">
+                    <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                    <h3 class="fw-bold counter" data-target="1000">0</h3>
+                    <p class="text-muted">Usuarios Activos</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-box">
+                    <i class="fas fa-project-diagram fa-2x text-success mb-3"></i>
+                    <h3 class="fw-bold counter" data-target="500">0</h3>
+                    <p class="text-muted">Proyectos</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-box">
+                    <i class="fas fa-clock fa-2x text-warning mb-3"></i>
+                    <h3 class="fw-bold">24/7</h3>
+                    <p class="text-muted">Disponibilidad</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-box">
+                    <i class="fas fa-star fa-2x text-danger mb-3"></i>
+                    <h3 class="fw-bold">4.9</h3>
+                    <p class="text-muted">Valoración</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not user.is_authenticated %}
+<section class="cta-section text-white text-center py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-4">¿Listo para comenzar?</h2>
+        <p class="lead mb-4">Únete a nuestra comunidad y empieza a disfrutar de todas las funcionalidades</p>
+        <a href="{% url 'registro' %}" class="btn btn-light btn-lg">
+            <i class="fas fa-rocket me-2"></i>Crear Cuenta Gratis
+        </a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Counter animation
+document.addEventListener('DOMContentLoaded', function() {
+    const counters = document.querySelectorAll('.counter');
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+        
+        const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+                counter.textContent = Math.ceil(current) + '+';
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.textContent = target + '+';
+            }
+        };
+        
+        // Start animation when element is visible
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                updateCounter();
+                observer.disconnect();
+            }
+        });
+        
+        observer.observe(counter);
+    });
+});
+</script>
+{% endblock %}

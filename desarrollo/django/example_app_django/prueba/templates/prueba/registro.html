@@ -1,0 +1,140 @@
+{% extends 'prueba/base.html' %}
+{% load static %}
+
+{% block title %}Registro - MiApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="auth-card card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <!-- Logo/Icon -->
+                    <div class="text-center mb-4">
+                        <div class="auth-icon mb-3">
+                            <i class="fas fa-user-plus fa-3x text-primary"></i>
+                        </div>
+                        <h3 class="fw-bold mb-2">Crear Cuenta</h3>
+                        <p class="text-muted">Comienza tu experiencia con nosotros</p>
+                    </div>
+
+                    <!-- Progress Steps -->
+                    <div class="registration-progress mb-4">
+                        <div class="d-flex justify-content-between">
+                            <div class="step active">
+                                <div class="step-circle"><i class="fas fa-user"></i></div>
+                                <small>Datos</small>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step">
+                                <div class="step-circle"><i class="fas fa-envelope"></i></div>
+                                <small>Email</small>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step">
+                                <div class="step-circle"><i class="fas fa-lock"></i></div>
+                                <small>Seguridad</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" novalidate class="auth-form" id="registroForm">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="col-md-{% if field.name == 'first_name' or field.name == 'last_name' %}6{% else %}12{% endif %} mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        <i class="fas fa-{% if 'username' in field.name %}user{% elif 'name' in field.name %}id-card{% elif 'email' in field.name %}envelope{% elif 'password' in field.name %}lock{% endif %} me-2"></i>
+                                        {{ field.label }}
+                                    </label>
+                                    <div class="input-group">
+                                        {% if field.name == 'username' or field.name == 'email' or 'password' in field.name %}
+                                            <span class="input-group-text">
+                                                <i class="fas fa-{% if 'username' in field.name %}user{% elif 'email' in field.name %}envelope{% elif 'password' in field.name %}lock{% endif %}"></i>
+                                            </span>
+                                        {% endif %}
+                                        {{ field }}
+                                    </div>
+                                    {% if field.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in field.errors %}
+                                                <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted d-block mt-1">
+                                            <i class="fas fa-info-circle me-1"></i>{{ field.help_text }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="acceptTerms" required>
+                            <label class="form-check-label" for="acceptTerms">
+                                Acepto los <a href="#" class="text-decoration-none">términos y condiciones</a>
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-rocket me-2"></i>Crear mi Cuenta
+                            </button>
+                        </div>
+
+                        <!-- Password Strength Indicator -->
+                        <div class="password-strength mb-3" style="display: none;">
+                            <small class="text-muted">Fortaleza de la contraseña:</small>
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="mb-0">¿Ya tienes cuenta? 
+                            <a href="{% url 'login' %}" class="fw-bold text-decoration-none">
+                                Inicia sesión aquí <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Password strength indicator
+const password1Input = document.querySelector('input[name="password1"]');
+if (password1Input) {
+    password1Input.addEventListener('input', function() {
+        const strengthDiv = document.querySelector('.password-strength');
+        const progressBar = strengthDiv.querySelector('.progress-bar');
+        const password = this.value;
+        let strength = 0;
+        
+        if (password.length >= 8) strength += 25;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
+        if (/\d/.test(password)) strength += 25;
+        if (/[@$!%*?&#]/.test(password)) strength += 25;
+        
+        strengthDiv.style.display = password.length > 0 ? 'block' : 'none';
+        progressBar.style.width = strength + '%';
+        progressBar.className = 'progress-bar ';
+        
+        if (strength <= 25) progressBar.classList.add('bg-danger');
+        else if (strength <= 50) progressBar.classList.add('bg-warning');
+        else if (strength <= 75) progressBar.classList.add('bg-info');
+        else progressBar.classList.add('bg-success');
+    });
+}
+</script>
+{% endblock %}

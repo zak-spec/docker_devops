@@ -1,0 +1,46 @@
+# Dependencias (se instalarán en el contenedor)
+/node_modules
+/vendor
+
+# Archivos de desarrollo
+.git
+.gitignore
+.gitattributes
+.editorconfig
+.env.example
+.phpunit.result.cache
+
+# Archivos de compilación
+/public/hot
+/public/build
+/public/storage
+
+# Archivos de caché y logs
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/bootstrap/cache/*
+
+# Archivos de IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Documentación
+README.md
+LICENSE
+*.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
